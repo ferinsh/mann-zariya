@@ -1,16 +1,61 @@
 import { Link, useParams } from "react-router-dom";
-import products from "../../data/products";
+import { useEffect, useState } from "react";
 import { BUSINESS } from "../../config/business";
 import "./Product.css";
 
 function Product() {
   const { slug } = useParams();
 
-  const product = products.find(
-    (item) => item.slug === slug
-  );
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState(null);
 
-  if (!product) {
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        setLoading(true);
+        setNotFound(false);
+        setError(null);
+
+        const response = await fetch(
+          `http://localhost:5000/api/products/${slug}`
+        );
+
+        if (response.status === 404) {
+          setNotFound(true);
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch product");
+        }
+
+        const data = await response.json();
+
+        setProduct(data);
+      } catch (error) {
+        console.error(error);
+        setError("Unable to load this product. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProduct();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <main className="product-page">
+        <div className="product-container">
+          <p>Loading product...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (notFound) {
     return (
       <main className="product-not-found">
         <div className="product-container">
@@ -20,6 +65,20 @@ function Product() {
 
           <Link to="/shop" className="product-back-link">
             Back to Collection →
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="product-page">
+        <div className="product-container">
+          <p>{error}</p>
+
+          <Link to="/shop" className="product-back-link">
+            ← Back to Collection
           </Link>
         </div>
       </main>
@@ -39,13 +98,11 @@ function Product() {
   return (
     <main className="product-page">
       <div className="product-container">
-
         <Link to="/shop" className="product-back-link">
           ← Back to Collection
         </Link>
 
         <section className="product-layout">
-
           <div className="product-image-wrapper">
             <img
               src={product.image}
@@ -55,11 +112,6 @@ function Product() {
           </div>
 
           <div className="product-info">
-
-            <p className="section-eyebrow">
-              {product.category}
-            </p>
-
             <h1>{product.name}</h1>
 
             <p className="product-price">
@@ -86,9 +138,7 @@ function Product() {
               Contact us on WhatsApp to check availability, sizes, and
               additional details.
             </p>
-
           </div>
-
         </section>
       </div>
     </main>
