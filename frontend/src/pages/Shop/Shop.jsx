@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./Shop.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ function Shop() {
     async function fetchProducts() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/products"
+          `${API_URL}/api/products`
         );
 
         if (!response.ok) {

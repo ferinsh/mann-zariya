@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { BUSINESS } from "../../config/business";
 import "./Product.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Product() {
   const { slug } = useParams();
 
@@ -20,7 +22,7 @@ function Product() {
         setError(null);
 
         const response = await fetch(
-          `http://localhost:5000/api/products/${slug}`
+          `${API_URL}/api/products/${slug}`
         );
 
         if (response.status === 404) {
