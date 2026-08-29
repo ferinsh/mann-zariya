@@ -13,7 +13,7 @@ function Shop() {
     async function fetchProducts() {
       try {
         const response = await fetch(
-          `${API_URL}/api/products`
+          `${API_URL}/products`
         );
 
         if (!response.ok) {

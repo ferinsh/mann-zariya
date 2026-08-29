@@ -22,7 +22,7 @@ function Product() {
         setError(null);
 
         const response = await fetch(
-          `${API_URL}/api/products/${slug}`
+          `${API_URL}/products/${slug}`
         );
 
         if (response.status === 404) {
