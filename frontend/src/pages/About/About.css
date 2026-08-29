@@ -1,0 +1,252 @@
+.about-page {
+  overflow: hidden;
+}
+
+/* =========================
+   SHARED
+========================= */
+
+.about-container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+
+  padding: 0 var(--page-padding);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.about-hero {
+  padding: 150px 0 140px;
+
+  background-color: var(--color-surface);
+}
+
+.about-hero h1 {
+  max-width: 1000px;
+
+  margin-bottom: 35px;
+
+  font-family: var(--font-heading);
+
+  font-size: clamp(3.5rem, 6vw, 6.5rem);
+  font-weight: 500;
+
+  line-height: 0.95;
+
+  color: var(--color-primary);
+}
+
+.about-hero-description {
+  max-width: 600px;
+
+  color: var(--color-muted);
+
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* =========================
+   STORY
+========================= */
+
+.about-story {
+  padding: 150px 0;
+}
+
+.about-story-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 120px;
+}
+
+.about-story-heading h2 {
+  font-family: var(--font-heading);
+
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 500;
+
+  line-height: 0.98;
+
+  color: var(--color-primary);
+}
+
+.about-story-content {
+  padding-top: 50px;
+}
+
+.about-story-content p {
+  margin-bottom: 28px;
+
+  color: var(--color-muted);
+
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+/* =========================
+   PHILOSOPHY
+========================= */
+
+.about-philosophy {
+  padding: 150px 0;
+
+  text-align: center;
+
+  background-color: var(--color-surface);
+}
+
+.about-philosophy .section-eyebrow {
+  margin-bottom: 28px;
+}
+
+.about-philosophy h2 {
+  margin-bottom: 35px;
+
+  font-family: var(--font-heading);
+
+  font-size: clamp(3.5rem, 6vw, 6rem);
+  font-weight: 500;
+
+  line-height: 0.95;
+
+  color: var(--color-primary);
+}
+
+.about-philosophy > .about-container > p:last-child {
+  max-width: 600px;
+
+  margin: 0 auto;
+
+  color: var(--color-muted);
+
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* =========================
+   CTA
+========================= */
+
+.about-cta {
+  padding: 150px 0;
+
+  text-align: center;
+}
+
+.about-cta h2 {
+  margin-bottom: 40px;
+
+  font-family: var(--font-heading);
+
+  font-size: clamp(3.5rem, 6vw, 6rem);
+  font-weight: 500;
+
+  line-height: 0.95;
+
+  color: var(--color-primary);
+}
+
+.about-cta-button {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 18px;
+
+  padding: 18px 28px;
+
+  background-color: var(--color-primary);
+
+  color: white;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.about-cta-button:hover {
+  transform: translateY(-3px);
+
+  background-color: #171d31;
+}
+
+.about-cta-button span {
+  font-size: 1.2rem;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+  .about-hero {
+    padding: 110px 0;
+  }
+
+  .about-story {
+    padding: 110px 0;
+  }
+
+  .about-story-grid {
+    grid-template-columns: 1fr;
+
+    gap: 50px;
+  }
+
+  .about-story-content {
+    padding-top: 0;
+  }
+
+  .about-philosophy,
+  .about-cta {
+    padding: 110px 0;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .about-hero {
+    padding: 80px 0;
+  }
+
+  .about-hero h1 {
+    font-size: clamp(2.8rem, 13vw, 4rem);
+  }
+
+  .about-hero-description {
+    font-size: 0.95rem;
+  }
+
+  .about-story {
+    padding: 80px 0;
+  }
+
+  .about-story-heading h2 {
+    font-size: clamp(2.8rem, 13vw, 4rem);
+  }
+
+  .about-story-content p {
+    font-size: 0.95rem;
+  }
+
+  .about-philosophy,
+  .about-cta {
+    padding: 85px 0;
+  }
+
+  .about-philosophy h2,
+  .about-cta h2 {
+    font-size: clamp(2.8rem, 13vw, 4rem);
+  }
+}
