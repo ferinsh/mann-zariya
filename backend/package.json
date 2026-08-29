@@ -8,7 +8,7 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "seed": "node prisma/seed.js",
-    "postinstall": "prisma skills sync || exit 0"
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
