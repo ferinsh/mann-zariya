@@ -10,6 +10,7 @@ function Product() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -34,6 +35,11 @@ function Product() {
         const data = await response.json();
 
         setProduct(data);
+        setSelectedImage(
+          data.images && data.images.length > 0
+            ? data.images[0].url
+            : data.image
+        );
       } catch (error) {
         console.error(error);
         setError("Unable to load this product. Please try again later.");
@@ -103,12 +109,43 @@ function Product() {
         </Link>
 
         <section className="product-layout">
-          <div className="product-image-wrapper">
+          {/* <div className="product-image-wrapper">
             <img
               src={product.image}
               alt={product.name}
               className="product-image"
             />
+          </div> */}
+          <div className="product-gallery">
+            <div className="product-image-wrapper">
+              <img
+                src={selectedImage || product.image}
+                alt={product.name}
+                className="product-image"
+              />
+            </div>
+
+            {product.images && product.images.length > 1 && (
+              <div className="product-thumbnails">
+                {product.images.map((image) => (
+                  <button
+                    key={image.id}
+                    type="button"
+                    className={`product-thumbnail ${
+                      selectedImage === image.url
+                        ? "product-thumbnail-active"
+                        : ""
+                    }`}
+                    onClick={() => setSelectedImage(image.url)}
+                  >
+                    <img
+                      src={image.url}
+                      alt={product.name}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="product-info">
@@ -123,6 +160,20 @@ function Product() {
             <p className="product-description">
               {product.description}
             </p>
+
+            {product.sizes && product.sizes.length > 0 && (
+              <div className="product-sizes">
+                <p className="product-sizes-label">Available Sizes</p>
+
+                <div className="product-sizes-list">
+                  {product.sizes.map((size) => (
+                    <span key={size} className="product-size">
+                      {size}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <a
               href={whatsappLink}

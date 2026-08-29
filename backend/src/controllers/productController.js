@@ -3,9 +3,13 @@ import prisma from "../config/prisma.js";
 export async function getProducts(req, res) {
   try {
     const products = await prisma.product.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
+        where: {
+            available: true,
+        },
+
+        orderBy: {
+            createdAt: "desc",
+        },
     });
 
     res.json(products);
@@ -13,7 +17,7 @@ export async function getProducts(req, res) {
     console.error("Error fetching products:", error);
 
     res.status(500).json({
-      message: "Failed to fetch products",
+        message: "Failed to fetch products",
     });
   }
 }
@@ -25,6 +29,14 @@ export async function getProductBySlug(req, res) {
     const product = await prisma.product.findUnique({
       where: {
         slug,
+      },
+
+      include: {
+        images: {
+          orderBy: {
+            position: "asc",
+          },
+        },
       },
     });
 
