@@ -1,7 +1,8 @@
+const name = "Mann Zariya" 
+const whatsappNumber = "918891139060"
+const whatsappUrl = `https://wa.me/${whatsappNumber}`
 export const BUSINESS = {
-  name: "Mann Zariya",
-
-  whatsappNumber: "918848534986",
-
-  whatsappUrl: "https://wa.me/918848534986",
+  name,
+  whatsappNumber,
+  whatsappUrl
 };
