@@ -10,7 +10,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   process.env.FRONTEND_URL,
   process.env.FRONTEND_URL_2,
-  process.env.ADMIN_DASHBOARD_URL
+  process.env.ADMIN_DASHBOARD_URL,
+  process.env.ADMIN_DASHBOARD_URL_2
 ].filter(Boolean);
 
 app.use(
