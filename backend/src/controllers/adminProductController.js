@@ -1,5 +1,34 @@
 import prisma from "../config/prisma.js";
 import supabase from "../config/supabase.js";
+import sharp from "sharp";
+
+async function convertToJpeg(file) {
+  const isJpeg =
+    file.mimetype === "image/jpeg";
+
+  // Keep existing JPEG files unchanged.
+  if (isJpeg) {
+    return {
+      buffer: file.buffer,
+      mimetype: "image/jpeg",
+      extension: "jpeg",
+    };
+  }
+
+  // Convert all other supported image formats to JPEG.
+  const jpegBuffer = await sharp(file.buffer)
+    .flatten({ background: "#ffffff" })
+    .jpeg({
+      quality: 90,
+    })
+    .toBuffer();
+
+  return {
+    buffer: jpegBuffer,
+    mimetype: "image/jpeg",
+    extension: "jpeg",
+  };
+}
 
 export async function getAdminProducts(req, res) {
   try {
@@ -81,17 +110,16 @@ export async function createAdminProduct(req, res) {
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
 
-      const fileExtension =
-        file.originalname.split(".").pop();
+      const convertedImage = await convertToJpeg(file);
 
       const fileName =
-        `${slug}/${Date.now()}-${index}.${fileExtension}`;
+        `${slug}/${Date.now()}-${index}.${convertedImage.extension}`;
 
       const { error: uploadError } =
         await supabase.storage
           .from("product-images")
-          .upload(fileName, file.buffer, {
-            contentType: file.mimetype,
+          .upload(fileName, convertedImage.buffer, {
+            contentType: convertedImage.mimetype,
             upsert: false,
           });
 
@@ -396,18 +424,16 @@ export async function addAdminProductImages(req, res) {
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
 
-      const fileExtension = file.originalname
-        .split(".")
-        .pop();
+      const convertedImage = await convertToJpeg(file);
 
       const fileName =
-        `${product.slug}/${Date.now()}-${index}.${fileExtension}`;
+        `${product.slug}/${Date.now()}-${index}.${convertedImage.extension}`;
 
       const { error: uploadError } =
         await supabase.storage
           .from("product-images")
-          .upload(fileName, file.buffer, {
-            contentType: file.mimetype,
+          .upload(fileName, convertedImage.buffer, {
+            contentType: convertedImage.mimetype,
             upsert: false,
           });
 
