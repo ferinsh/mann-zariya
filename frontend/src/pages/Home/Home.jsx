@@ -1,9 +1,46 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import products from "../../data/products";
+// import products from "../../data/products";
 import "./Home.css";
 
+import heroImage_1 from "../../assets/images/home/hero-image_1.webp"
+import heroImage_2 from "../../assets/images/home/hero-image_2.webp"
+import collectionImage_1 from "../../assets/images/home/collection-image_1.jpeg"
+import collectionImage_2 from "../../assets/images/home/collection-image_2.jpeg"
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch(
+          `${API_URL}/products`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        const data = await response.json();
+
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+        setError("Unable to load products. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
   return (
     <main className="home">
       <section className="hero">
@@ -31,14 +68,14 @@ function Home() {
           <div className="hero-images">
             <div className="hero-image hero-image-main">
               <img
-                src="https://placehold.co/700x900"
+                src={heroImage_2}
                 alt="Mann Zariya fashion collection"
               />
             </div>
 
             <div className="hero-image hero-image-secondary">
               <img
-                src="https://placehold.co/400x500"
+                src={heroImage_1}
                 alt="Mann Zariya fashion detail"
               />
             </div>
@@ -92,14 +129,14 @@ function Home() {
           <div className="collection-showcase">
             <div className="collection-image collection-image-large">
               <img
-                src="https://placehold.co/900x650"
+                src={collectionImage_2}
                 alt="Mann Zariya collection"
               />
             </div>
 
             <div className="collection-image collection-image-small">
               <img
-                src="https://placehold.co/500x650"
+                src={collectionImage_1}
                 alt="Mann Zariya fashion detail"
               />
             </div>
@@ -121,6 +158,10 @@ function Home() {
               View All <span>→</span>
             </Link>
           </div>
+
+          {loading && <p>Loading products...</p>}
+
+          {error && <p>{error}</p>}
 
           <div className="featured-products-grid">
             {products.slice(0, 3).map((product) => (
