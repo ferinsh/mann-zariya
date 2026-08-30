@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import adminProductRoutes from "./routes/adminProductRoutes.js";
+import { authenticateAdmin } from "./middleware/authMiddleware.js";
 import productRoutes from "./routes/productRoutes.js";
 
 const app = express();
@@ -7,7 +9,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   process.env.FRONTEND_URL,
-  process.env.FRONTEND_URL_2
+  process.env.FRONTEND_URL_2,
+  process.env.ADMIN_DASHBOARD_URL
 ].filter(Boolean);
 
 app.use(
@@ -25,6 +28,12 @@ app.use(
 app.use(express.json());
 
 app.use("/api/products", productRoutes);
+
+app.use(
+  "/api/admin/products",
+  authenticateAdmin,
+  adminProductRoutes
+);
 
 app.get("/", (req, res) => {
   res.json({

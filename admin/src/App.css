@@ -1,0 +1,8 @@
+.admin-app {
+  min-height: 100vh;
+  padding: 40px;
+}
+
+.admin-app h1 {
+  margin-bottom: 8px;
+}
