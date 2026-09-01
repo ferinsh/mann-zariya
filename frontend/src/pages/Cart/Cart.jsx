@@ -210,22 +210,26 @@ function Cart() {
         </div>
 
         <div className="cart-summary">
-          <p>
-            Total: ₹{" "}
-            {Number(
-              cart.cost.totalAmount.amount
-            ).toLocaleString("en-IN")}
-          </p>
+            <p>
+                Total: ₹{" "}
+                {Number(
+                cart.cost.totalAmount.amount
+                ).toLocaleString("en-IN")}
+            </p>
 
-          <button
-            type="button"
-            className="cart-checkout-button"
-            onClick={() => {
-              window.location.href = cart.checkoutUrl;
-            }}
-          >
-            Proceed to Checkout →
-          </button>
+            <button
+                type="button"
+                className="cart-checkout-button"
+                onClick={() => {
+                    const checkoutUrl = new URL(cart.checkoutUrl);
+
+                    checkoutUrl.searchParams.set("sso", "silent");
+
+                    window.location.href = checkoutUrl.toString();
+                }}
+            >
+                Proceed to Checkout →
+            </button>
         </div>
       </div>
     </main>
