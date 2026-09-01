@@ -214,9 +214,29 @@ function Account() {
                         )}
                     </div>
 
-                    <p className="account-order-status">
-                        {order.financialStatus}
+                    <p
+                    className={`account-order-status ${
+                        order.cancelledAt
+                        ? "account-order-cancelled"
+                        : ""
+                    }`}
+                    >
+                    {order.cancelledAt
+                        ? "Cancelled"
+                        : order.financialStatus}
                     </p>
+                    {order.cancelledAt && (
+                    <p className="account-order-cancelled-date">
+                        Cancelled on{" "}
+                        {new Date(
+                        order.cancelledAt
+                        ).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                        })}
+                    </p>
+                    )}
                     </div>
                 ))}
                 </div>

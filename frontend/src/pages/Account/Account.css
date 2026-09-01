@@ -188,6 +188,18 @@
   color: var(--color-primary);
 }
 
+.account-order-cancelled {
+  color: #b42318;
+}
+
+.account-order-cancelled-date {
+  margin-top: 8px;
+
+  font-size: 0.8rem;
+
+  color: #777;
+}
+
 @media (max-width: 600px) {
   .account-page {
     padding: 50px 0 90px;

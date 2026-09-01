@@ -245,29 +245,32 @@ export async function getCustomer() {
         }
 
         orders(first: 20) {
-            edges {
+        edges {
             node {
-                id
-                name
-                processedAt
+            id
+            name
+            processedAt
+            financialStatus
+            fulfillmentStatus
 
-                financialStatus
+            cancelledAt
+            cancelReason
 
-                totalPrice {
+            totalPrice {
                 amount
                 currencyCode
-                }
+            }
 
-                lineItems(first: 20) {
+            lineItems(first: 20) {
                 edges {
-                    node {
+                node {
                     title
                     quantity
-                    }
                 }
                 }
             }
             }
+        }
         }
         }
     }
