@@ -1,18 +1,26 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BUSINESS } from "../../config/business";
+import { getProductByHandle } from "../../services/shopify";
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 import "./Product.css";
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 
 function Product() {
   const { slug } = useParams();
+
+  const { addItem } = useContext(CartContext);
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [addingToCart, setAddingToCart] = useState(false);
+
 
   useEffect(() => {
     async function fetchProduct() {
@@ -21,22 +29,20 @@ function Product() {
         setNotFound(false);
         setError(null);
 
-        const response = await fetch(
-          `${API_URL}/products/${slug}`
-        );
+        const data = await getProductByHandle(slug);
 
-        if (response.status === 404) {
+        if (!data) {
           setNotFound(true);
           return;
         }
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch product");
-        }
-
-        const data = await response.json();
-
         setProduct(data);
+        const firstAvailableVariant = data.variants.find(
+          (variant) => variant.availableForSale
+        );
+
+        setSelectedVariant(firstAvailableVariant || null);
+
         setSelectedImage(
           data.images && data.images.length > 0
             ? data.images[0].url
@@ -103,6 +109,25 @@ function Product() {
 
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
+  async function handleAddToCart() {
+    if (!selectedVariant) {
+      return;
+    }
+
+    try {
+      setAddingToCart(true);
+
+      await addItem(selectedVariant.id, 1);
+
+      alert("Added to cart!");
+    } catch (error) {
+      console.error(error);
+      alert("Unable to add this item to your cart.");
+    } finally {
+      setAddingToCart(false);
+    }
+  }
+
   return (
     <main className="product-page">
       <div className="product-container">
@@ -163,7 +188,7 @@ function Product() {
               {product.description}
             </p>
 
-            {product.sizes && product.sizes.length > 0 && (
+            {/* {product.sizes && product.sizes.length > 0 && (
               <div className="product-sizes">
                 <p className="product-sizes-label">Available Sizes</p>
 
@@ -175,9 +200,40 @@ function Product() {
                   ))}
                 </div>
               </div>
+            )} */}
+            {product.variants && product.variants.length > 0 && (
+              <div className="product-sizes">
+                <p className="product-sizes-label">Select Size</p>
+
+                <div className="product-sizes-list">
+                  {product.variants.map((variant) => {
+                    const size = variant.selectedOptions.find(
+                      (option) => option.name === "Size"
+                    )?.value;
+
+                    if (!size) return null;
+
+                    return (
+                      <button
+                        key={variant.id}
+                        type="button"
+                        className={`product-size ${
+                          selectedVariant?.id === variant.id
+                            ? "product-size-selected"
+                            : ""
+                        }`}
+                        onClick={() => setSelectedVariant(variant)}
+                        disabled={!variant.availableForSale}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             )}
 
-            <a
+            {/* <a
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
@@ -185,12 +241,21 @@ function Product() {
             >
               Enquire on WhatsApp
               <span>→</span>
-            </a>
+            </a> */}
+            <button
+              type="button"
+              className="whatsapp-button"
+              onClick={handleAddToCart}
+              disabled={!selectedVariant || addingToCart}
+            >
+              {addingToCart ? "Adding..." : "Add to Cart"}
+              <span>→</span>
+            </button>
 
-            <p className="product-note">
+            {/* <p className="product-note">
               Contact us on WhatsApp to check availability, sizes, and
               additional details.
-            </p>
+            </p> */}
           </div>
         </section>
       </div>

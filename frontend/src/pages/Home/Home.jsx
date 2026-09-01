@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import { getProducts } from "../../services/shopify";
 // import products from "../../data/products";
 import "./Home.css";
 
@@ -9,7 +10,7 @@ import heroImage_2 from "../../assets/images/home/hero-image_2.webp"
 import collectionImage_1 from "../../assets/images/home/collection-image_1.jpeg"
 import collectionImage_2 from "../../assets/images/home/collection-image_2.jpeg"
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -19,15 +20,7 @@ function Home() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch(
-          `${API_URL}/products`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-
-        const data = await response.json();
+        const data = await getProducts();
 
         setProducts(data);
       } catch (error) {
@@ -40,6 +33,7 @@ function Home() {
 
     fetchProducts();
   }, []);
+
 
   return (
     <main className="home">

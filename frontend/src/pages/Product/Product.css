@@ -208,6 +208,22 @@
   font-weight: 500;
 
   color: var(--color-primary);
+  cursor: pointer;
+}
+
+.product-size:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.product-size:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.product-size-selected {
+  background-color: var(--color-primary);
+  color: white;
 }
 
 /* =========================

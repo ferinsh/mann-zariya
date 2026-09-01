@@ -1,13 +1,44 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
+import { loginCustomer } from "../../services/customerAuth";
 import "./Navbar.css";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // const [cartCount, setCartCount] = useState(0);
+  const { cartCount } = useContext(CartContext);
 
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+  // useEffect(() => {
+  //   async function loadCartCount() {
+  //     try {
+  //       const cartId = localStorage.getItem("shopify_cart_id");
+
+  //       if (!cartId) {
+  //         setCartCount(0);
+  //         return;
+  //       }
+
+  //       const cart = await getCart(cartId);
+
+  //       const totalItems = cart.lines.edges.reduce(
+  //         (total, { node }) => total + node.quantity,
+  //         0
+  //       );
+
+  //       setCartCount(totalItems);
+  //     } catch (error) {
+  //       console.error("Unable to load cart count:", error);
+  //       setCartCount(0);
+  //     }
+  //   }
+
+  //   loadCartCount();
+  // }, []);
 
   return (
     <header className="navbar">
@@ -22,6 +53,19 @@ function Navbar() {
           <Link to="/shop">Shop</Link>
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
+          <Link to="/cart">
+            Cart
+            {cartCount > 0 && (
+              <span className="cart-count">({cartCount})</span>
+            )}
+          </Link>
+          <button
+            type="button"
+            className="navbar-account-button"
+            onClick={loginCustomer}
+          >
+            Account
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -54,6 +98,24 @@ function Navbar() {
         <Link to="/contact" onClick={closeMenu}>
           Contact
         </Link>
+
+        <Link to="/cart" onClick={closeMenu}>
+          Cart
+          {cartCount > 0 && (
+            <span className="cart-count">({cartCount})</span>
+          )}
+        </Link>
+        
+        <button
+          type="button"
+          className="mobile-account-button"
+          onClick={() => {
+            closeMenu();
+            loginCustomer();
+          }}
+        >
+          Account
+        </button>
       </div>
     </header>
   );

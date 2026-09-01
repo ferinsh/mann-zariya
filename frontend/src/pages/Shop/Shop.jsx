@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import { getProducts } from "../../services/shopify";
 import "./Shop.css";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 function Shop() {
   const [products, setProducts] = useState([]);
@@ -12,15 +11,7 @@ function Shop() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch(
-          `${API_URL}/products`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-
-        const data = await response.json();
+        const data = await getProducts();
 
         setProducts(data);
       } catch (error) {
