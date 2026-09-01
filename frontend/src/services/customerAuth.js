@@ -3,7 +3,7 @@ const SHOP_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN;
 // Your Customer Account API Client ID
 const CLIENT_ID = import.meta.env.VITE_SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID;
 
-const REDIRECT_URI = "https://mannzariya.com/account/callback";
+const REDIRECT_URI = "https://www.mannzariya.com/account/callback";
 
 
 function generateRandomString(length = 64) {
