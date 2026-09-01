@@ -279,3 +279,84 @@ export async function getCustomer() {
 
   return data.data.customer;
 }
+
+export async function logoutCustomer() {
+  const idToken = localStorage.getItem(
+    "shopify_customer_id_token"
+  );
+
+  // Clear local app session first
+  localStorage.removeItem(
+    "shopify_customer_access_token"
+  );
+
+  localStorage.removeItem(
+    "shopify_customer_refresh_token"
+  );
+
+  localStorage.removeItem(
+    "shopify_customer_token_expires_at"
+  );
+
+  localStorage.removeItem(
+    "shopify_auth_state"
+  );
+
+  localStorage.removeItem(
+    "shopify_code_verifier"
+  );
+
+  if (!idToken) {
+    localStorage.removeItem(
+      "shopify_customer_id_token"
+    );
+
+    window.location.href = "/";
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://${SHOP_DOMAIN}/.well-known/openid-configuration`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Unable to load Shopify authentication configuration."
+      );
+    }
+
+    const config = await response.json();
+
+    const logoutUrl = new URL(
+      config.end_session_endpoint
+    );
+
+    logoutUrl.searchParams.set(
+      "id_token_hint",
+      idToken
+    );
+
+    logoutUrl.searchParams.set(
+      "post_logout_redirect_uri",
+      window.location.origin
+    );
+
+    // Remove local ID token before leaving
+    localStorage.removeItem(
+      "shopify_customer_id_token"
+    );
+
+    // Redirect to Shopify so its session is terminated
+    window.location.href = logoutUrl.toString();
+
+  } catch (error) {
+    console.error("Logout failed:", error);
+
+    localStorage.removeItem(
+      "shopify_customer_id_token"
+    );
+
+    window.location.href = "/";
+  }
+}

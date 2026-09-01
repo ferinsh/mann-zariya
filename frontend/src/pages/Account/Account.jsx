@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   getCustomer,
   loginCustomer,
+  logoutCustomer,
 } from "../../services/customerAuth";
 
 import "./Account.css";
@@ -110,23 +111,23 @@ function Account() {
         </p>
 
         <div className="account-header">
-          <div>
-            <h1>
-              {fullName || "Welcome"}
-            </h1>
+            <div>
+                <h1>
+                {fullName || "Welcome"}
+                </h1>
 
-            <p className="account-email">
-              {customer.emailAddress?.emailAddress}
-            </p>
-          </div>
+                <p className="account-email">
+                {customer.emailAddress?.emailAddress}
+                </p>
+            </div>
 
-          <button
+            <button
             type="button"
             className="account-logout-button"
-            onClick={logout}
-          >
+            onClick={logoutCustomer}
+            >
             Logout
-          </button>
+            </button>
         </div>
 
         <div className="account-divider" />
