@@ -166,11 +166,61 @@ function Account() {
         </section>
 
         <section className="account-section">
-          <h2>Orders</h2>
+            <h2>Orders</h2>
 
-          <p className="account-description">
-            Your order history will appear here.
-          </p>
+            {customer.orders?.edges?.length === 0 ? (
+                <p className="account-description">
+                You haven't placed any orders yet.
+                </p>
+            ) : (
+                <div className="account-orders">
+                {customer.orders.edges.map(({ node: order }) => (
+                    <div
+                    className="account-order"
+                    key={order.id}
+                    >
+                    <div className="account-order-header">
+                        <div>
+                        <p className="account-order-name">
+                            {order.name}
+                        </p>
+
+                        <p className="account-order-date">
+                            {new Date(
+                            order.processedAt
+                            ).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                            })}
+                        </p>
+                        </div>
+
+                        <div className="account-order-total">
+                        ₹{" "}
+                        {Number(
+                            order.totalPrice.amount
+                        ).toLocaleString("en-IN")}
+                        </div>
+                    </div>
+
+                    <div className="account-order-items">
+                        {order.lineItems.edges.map(
+                        ({ node: item }, index) => (
+                            <p key={index}>
+                            {item.title} × {item.quantity}
+                            </p>
+                        )
+                        )}
+                    </div>
+
+                    <p className="account-order-status">
+                        {order.financialStatus}
+                    </p>
+                    </div>
+                ))}
+                </div>
+            )}
         </section>
 
       </div>

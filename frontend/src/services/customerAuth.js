@@ -229,23 +229,49 @@ export async function getCustomer() {
 
   const config = await response.json();
 
-  const query = `
+    const query = `
     query GetCustomer {
-      customer {
+        customer {
         id
         firstName
         lastName
 
         emailAddress {
-          emailAddress
+            emailAddress
         }
 
         phoneNumber {
-          phoneNumber
+            phoneNumber
         }
-      }
+
+        orders(first: 20) {
+            edges {
+            node {
+                id
+                name
+                processedAt
+
+                financialStatus
+
+                totalPrice {
+                amount
+                currencyCode
+                }
+
+                lineItems(first: 20) {
+                edges {
+                    node {
+                    title
+                    quantity
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
     }
-  `;
+    `;
 
   const customerResponse = await fetch(
     config.graphql_api,
